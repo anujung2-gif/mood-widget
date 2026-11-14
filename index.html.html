@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mood Palette</title>
+<style>
+  :root{
+    --ink:#37352F; --sub:rgba(55,53,47,.65); --faint:rgba(55,53,47,.45);
+    --line:rgba(55,53,47,.09); --hover:rgba(55,53,47,.06); --callout:#F7F6F3;
+    --cream:#F6E7D6; --polka:#3B4A23; --green:#448361;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:#fff}
+  body{
+    font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI Variable Display","Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";
+    color:var(--ink);font-size:14px;line-height:1.5;padding:4px 2px;
+  }
+  .widget{max-width:420px;margin:0 auto}
+  .cover{height:26px;border-radius:4px;background-color:var(--cream);
+    background-image:radial-gradient(circle,var(--polka) 0 3.2px,transparent 3.8px),radial-gradient(circle,var(--polka) 0 3.2px,transparent 3.8px);
+    background-size:22px 22px;background-position:0 0,11px 11px;margin-bottom:12px}
+  .head{display:flex;align-items:baseline;justify-content:space-between;padding:0 2px;margin-bottom:8px}
+  h1{font-size:16px;font-weight:600;letter-spacing:-.005em}
+  .sub{font-size:12px;color:var(--faint)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+  .quad{padding:8px 4px 8px 2px;border-bottom:1px solid var(--line)}
+  .quad:nth-child(odd):not(.wide){border-right:1px solid var(--line);padding-right:8px}
+  .quad:nth-child(even){padding-left:8px}
+  .quad.wide{grid-column:1/-1;padding-left:2px}
+  .qlabel{font-size:12px;color:var(--sub);margin:0 4px 4px;display:flex;align-items:center;gap:4px}
+  .chips{display:flex;flex-direction:column;gap:1px}
+  .quad.wide .chips{flex-direction:row;gap:8px}
+  .quad.wide .chip{flex:1}
+  .chip{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:4px;cursor:pointer;
+    border:0;background:transparent;font:inherit;color:inherit;text-align:left;width:100%;transition:background .12s}
+  .chip:hover{background:var(--hover)}
+  .chip.on{background:var(--bg)}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+  .name{font-size:14px;white-space:nowrap}
+  .chip.on .name{color:var(--tx);font-weight:500}
+  .tag{margin-left:auto;font-size:11.5px;padding:0 6px;border-radius:3px;background:var(--bg);color:var(--tx);white-space:nowrap;line-height:18px}
+  .chip.on .tag{background:#fff}
+  .callout{margin-top:10px;border-radius:4px;background:var(--callout);padding:12px 14px 12px 12px;display:flex;gap:10px;min-height:92px}
+  .callout .dot{width:12px;height:12px;margin-top:5px}
+  .ctitle{font-weight:600;font-size:14px}
+  .ctitle span{font-weight:400;font-size:12px;color:var(--faint);margin-left:6px}
+  .ctext{font-size:13.5px;color:var(--ink);margin-top:2px}
+  .tips{font-size:12.5px;color:var(--sub);display:grid;gap:3px}
+  .tips b{color:var(--ink);font-weight:600}
+  .foot{display:flex;justify-content:flex-end;margin-top:6px}
+  .toggle{font:inherit;font-size:12px;color:var(--faint);background:transparent;border:0;border-radius:4px;padding:2px 6px;cursor:pointer}
+  .toggle:hover{background:var(--hover);color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="widget">
+  <div class="head">
+    <h1>Mood palette</h1>
+    <span class="sub">하루 대표 색 1개</span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="callout" id="callout"></div>
+  <div class="foot"><button class="toggle" id="toggle">헷갈릴 때 ›</button></div>
+</div>
+
+<script>
+// Notion light-mode select colors: dot / tag background / tag text
+const C = {
+  yellow:{dot:"#E9B949",bg:"#FDECC8",tx:"#9A6B10"}, orange:{dot:"#E9832F",bg:"#FADEC9",tx:"#B25A0B"},
+  green:{dot:"#5B9C74",bg:"#DBEDDB",tx:"#2F6B48"},  pink:{dot:"#D46FA0",bg:"#F5E0E9",tx:"#A83C74"},
+  red:{dot:"#DF5A52",bg:"#FFE2DD",tx:"#B23A35"},    purple:{dot:"#9A72BF",bg:"#E8DEEE",tx:"#7A4F9E"},
+  blue:{dot:"#4D93C0",bg:"#D3E5EF",tx:"#2A6B92"},   gray:{dot:"#9B9A97",bg:"#E3E2E0",tx:"#5F5E5B"},
+  brown:{dot:"#A9775E",bg:"#EEE0DA",tx:"#86553F"},  def:{dot:"#D3D1CB",bg:"#EFEEEC",tx:"#5F5E5B"}
+};
+const Q = [
+  {label:"긍정 · 고에너지", items:[
+    {n:"기쁨",k:"yellow",t:"노랑",d:"좋은 일이 있었고 하루가 전반적으로 즐거움"},
+    {n:"설렘",k:"orange",t:"주황",d:"기대되거나 신나는 일, 들뜬 상태"}]},
+  {label:"긍정 · 저에너지", items:[
+    {n:"평온",k:"green",t:"초록",d:"별일 없이 안정적이고 마음이 편함"},
+    {n:"감사·뿌듯",k:"pink",t:"분홍",d:"사람 덕분에 따뜻했거나 스스로 해낸 게 있음"}]},
+  {label:"부정 · 고에너지", items:[
+    {n:"분노·짜증",k:"red",t:"빨강",d:"화나거나 억울한 일, 날이 선 상태"},
+    {n:"불안·초조",k:"purple",t:"보라",d:"걱정, 긴장, 생각이 많아 잠이 안 오는 상태"}]},
+  {label:"부정 · 저에너지", items:[
+    {n:"우울·서운",k:"blue",t:"파랑",d:"슬프거나 외롭거나 마음이 가라앉음"},
+    {n:"무기력·피곤",k:"gray",t:"회색",d:"감정보다 체력이 먼저 바닥난 날"}]},
+  {label:"중립 · 혼합", wide:true, items:[
+    {n:"싱숭생숭",k:"brown",t:"갈색",d:"좋은 일과 나쁜 일이 섞여 하나로 정하기 어려움"},
+    {n:"무난",k:"def",t:"기본",d:"특별한 감정이 없는 평범한 하루"}]}
+];
+const grid=document.getElementById('grid'), call=document.getElementById('callout'), tog=document.getElementById('toggle');
+const chips=[]; let cur=null, showTips=false;
+const setVars=(el,c)=>{el.style.setProperty('--c',c.dot);el.style.setProperty('--bg',c.bg);el.style.setProperty('--tx',c.tx)};
+Q.forEach(q=>{
+  const box=document.createElement('div'); box.className='quad'+(q.wide?' wide':'');
+  box.innerHTML=`<div class="qlabel">${q.label}</div><div class="chips"></div>`;
+  q.items.forEach(it=>{
+    const b=document.createElement('button'); b.className='chip'; setVars(b,C[it.k]);
+    b.innerHTML=`<span class="dot"></span><span class="name">${it.n}</span><span class="tag">${it.t}</span>`;
+    b.onclick=()=>{showTips=false;select(it,b)};
+    box.querySelector('.chips').appendChild(b); chips.push([it,b]);
+  });
+  grid.appendChild(box);
+});
+function render(){
+  if(showTips){
+    call.innerHTML=`<div class="tips">
+      <div><b>회색 vs 파랑</b> 쉬면 나아지면 회색, 쉬어도 가라앉아 있으면 파랑</div>
+      <div><b>보라 vs 빨강</b> 앞으로의 일이 원인이면 보라, 이미 일어난 일이면 빨강</div>
+      <div><b>대표 색</b> 잠들기 전 남아 있는 감정 기준, 보조 감정은 따로</div>
+      <div><b>갈색</b> 주 2~3회 넘으면 기준 다시 점검</div></div>`;
+    tog.textContent='‹ 기준 보기';
+  }else{
+    const c=C[cur.k];
+    call.innerHTML=`<span class="dot" style="--c:${c.dot}"></span><div>
+      <div class="ctitle">${cur.n}<span>노션 ${cur.t}</span></div>
+      <p class="ctext">${cur.d}</p></div>`;
+    tog.textContent='헷갈릴 때 ›';
+  }
+}
+function select(it,b){chips.forEach(([,x])=>x.classList.remove('on'));b.classList.add('on');cur=it;render()}
+tog.onclick=()=>{showTips=!showTips;render()};
+select(chips[0][0],chips[0][1]);
+</script>
+</body>
+</html>
