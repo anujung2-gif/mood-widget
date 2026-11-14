@@ -41,7 +41,7 @@
   .chip.on .name{color:var(--tx);font-weight:500}
   .tag{margin-left:auto;font-size:11.5px;padding:0 6px;border-radius:3px;background:var(--bg);color:var(--tx);white-space:nowrap;line-height:18px}
   .chip.on .tag{background:#fff}
-  .callout{margin-top:10px;border-radius:4px;background:var(--callout);padding:12px 14px 12px 12px;display:flex;gap:10px;min-height:92px}
+  .callout{margin-top:10px;border-radius:4px;background:var(--callout);padding:11px 14px 11px 12px;display:flex;gap:10px}
   .callout .dot{width:12px;height:12px;margin-top:5px}
   .ctitle{font-weight:600;font-size:14px}
   .ctitle span{font-weight:400;font-size:12px;color:var(--faint);margin-left:6px}
@@ -107,10 +107,8 @@ Q.forEach(q=>{
 function render(){
   if(showTips){
     call.innerHTML=`<div class="tips">
-      <div><b>회색 vs 파랑</b> 쉬면 나아지면 회색, 쉬어도 가라앉아 있으면 파랑</div>
-      <div><b>보라 vs 빨강</b> 앞으로의 일이 원인이면 보라, 이미 일어난 일이면 빨강</div>
-      <div><b>대표 색</b> 잠들기 전 남아 있는 감정 기준, 보조 감정은 따로</div>
-      <div><b>갈색</b> 주 2~3회 넘으면 기준 다시 점검</div></div>`;
+      <div><b>회색</b> 쉬면 회복 · <b>파랑</b> 쉬어도 가라앉음</div>
+      <div><b>보라</b> 앞일 걱정 · <b>빨강</b> 이미 일어난 일</div></div>`;
     tog.textContent='‹ 기준 보기';
   }else{
     const c=C[cur.k];
