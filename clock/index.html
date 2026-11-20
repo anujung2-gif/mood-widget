@@ -14,37 +14,37 @@
 </style>
 </head>
 <body>
-<svg viewBox="146 18 388 518" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="clock">
-  <path d="M340 22 L530 168 L494 168 L494 532 L186 532 L186 168 L150 168 Z" fill="#FBF6EF" stroke="#E8DCCB" stroke-width="2" stroke-linejoin="round"/>
-  <rect x="240" y="130" width="200" height="340" rx="100" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+<svg viewBox="132 8 416 554" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-label="clock">
+  <path d="M340 14 L544 166 L506 166 L506 556 L174 556 L174 166 L136 166 Z" fill="#FBF6EF" stroke="#E8DCCB" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="228" y="124" width="224" height="370" rx="112" fill="#FFFFFF" stroke="#79A872" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
   <g class="w">
-    <text x="338" y="132" font-size="46" fill="#2E7D32">Twelve</text>
-    <text x="276" y="186" font-size="30" fill="#1B5E20">Eleven</text>
-    <text x="414" y="182" font-size="38" fill="#2E7D32">One</text>
-    <text x="258" y="242" font-size="40" fill="#2E7D32">Ten</text>
-    <text x="428" y="246" font-size="30" fill="#1B5E20">Two</text>
-    <text x="252" y="302" font-size="30" fill="#1B5E20">Nine</text>
-    <text x="428" y="300" font-size="36" fill="#2E7D32">Three</text>
-    <text x="258" y="358" font-size="36" fill="#2E7D32">Eight</text>
-    <text x="426" y="362" font-size="29" fill="#1B5E20">Four</text>
-    <text x="280" y="414" font-size="30" fill="#1B5E20">Seven</text>
-    <text x="408" y="410" font-size="38" fill="#2E7D32">Five</text>
-    <text x="344" y="466" font-size="50" fill="#2E7D32">Six</text>
+    <text x="338" y="124" font-size="58" fill="#4F8A49">Twelve</text>
+    <text x="266" y="186" font-size="37" fill="#3B6E36">Eleven</text>
+    <text x="424" y="182" font-size="47" fill="#4F8A49">One</text>
+    <text x="246" y="246" font-size="49" fill="#4F8A49">Ten</text>
+    <text x="440" y="250" font-size="37" fill="#3B6E36">Two</text>
+    <text x="240" y="310" font-size="38" fill="#3B6E36">Nine</text>
+    <text x="440" y="308" font-size="44" fill="#4F8A49">Three</text>
+    <text x="248" y="370" font-size="44" fill="#4F8A49">Eight</text>
+    <text x="438" y="374" font-size="36" fill="#3B6E36">Four</text>
+    <text x="272" y="432" font-size="38" fill="#3B6E36">Seven</text>
+    <text x="414" y="428" font-size="47" fill="#4F8A49">Five</text>
+    <text x="344" y="494" font-size="62" fill="#4F8A49">Six</text>
   </g>
-  <line id="m" x1="340" y1="300" x2="340" y2="244" stroke="#BCBCBC" stroke-width="6" stroke-linecap="round"/>
-  <line id="h" x1="340" y1="300" x2="340" y2="264" stroke="#000000" stroke-width="8" stroke-linecap="round"/>
-  <line id="s" x1="340" y1="300" x2="340" y2="248" stroke="#FF0000" stroke-width="2"/>
-  <rect x="326" y="286" width="28" height="28" fill="#F8BBD0" stroke="#EBB1C5"/>
-  <circle cx="340" cy="300" r="3.5" fill="#E91E63"/>
+  <line id="m" x1="340" y1="308" x2="340" y2="248" stroke="#C2BCB4" stroke-width="6.5" stroke-linecap="round"/>
+  <line id="h" x1="340" y1="308" x2="340" y2="270" stroke="#2B2724" stroke-width="8.5" stroke-linecap="round"/>
+  <line id="s" x1="340" y1="308" x2="340" y2="252" stroke="#E06A6A" stroke-width="2"/>
+  <rect x="325" y="293" width="30" height="30" fill="#F4C6D2" stroke="#E9B2C1"/>
+  <circle cx="340" cy="308" r="3.8" fill="#D65C7E"/>
 </svg>
 <script>
 (function () {
   var h = document.getElementById('h'), m = document.getElementById('m'), s = document.getElementById('s');
   function tick() {
     var d = new Date(), sec = d.getSeconds(), min = d.getMinutes() + sec / 60, hr = (d.getHours() % 12) + min / 60;
-    h.setAttribute('transform', 'rotate(' + hr * 30 + ' 340 300)');
-    m.setAttribute('transform', 'rotate(' + min * 6 + ' 340 300)');
-    s.setAttribute('transform', 'rotate(' + sec * 6 + ' 340 300)');
+    h.setAttribute('transform', 'rotate(' + hr * 30 + ' 340 308)');
+    m.setAttribute('transform', 'rotate(' + min * 6 + ' 340 308)');
+    s.setAttribute('transform', 'rotate(' + sec * 6 + ' 340 308)');
   }
   tick();
   setInterval(tick, 1000);
